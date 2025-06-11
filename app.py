@@ -204,9 +204,9 @@ if st.session_state["authenticated"]:
         column_options_final = ["-- Select Title Column --"] + column_options
         title_column_name = st.selectbox("Select Title Column", column_options_final)
     
-        # Load Sentence Transformer Model
-        model = SentenceTransformer('paraphrase-multilingual-MiniLM-L12-v2')
-        warnings.filterwarnings("ignore")
+
+    # model = SentenceTransformer('paraphrase-multilingual-MiniLM-L12-v2')
+    # warnings.filterwarnings("ignore")
 
         
     # Show uploaded file preview (after upload)
