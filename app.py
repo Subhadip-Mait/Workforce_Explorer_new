@@ -24,6 +24,11 @@ if "task_extraction" not in st.session_state:
 
 if "final_scoring" not in st.session_state:
     st.session_state.final_scoring = False
+
+if "final_summary" not in st.session_state:
+    st.session_state.final_summary = False
+
+
 if "title_data" not in st.session_state:
     st.session_state["title_data"] = None
 
@@ -241,6 +246,7 @@ if st.session_state["authenticated"]:
             st.session_state.title_matching = True
             st.session_state.task_extraction = False  # reset later steps
             st.session_state.final_scoring = False
+            st.session_state.final_summary = False
         
     if st.session_state.get("title_matching", False):
         st.subheader("✅ Title Matching Results")
@@ -256,6 +262,7 @@ if st.session_state["authenticated"]:
             st.session_state["task_extracted_data"] = task_extracted_data
             st.session_state.task_extraction = True
             st.session_state.final_scoring = False  # reset final scoring if re-run
+            st.session_state.final_summary = False
     
     if st.session_state.get("task_extraction", False):
         st.subheader("✅ Extracted Tasks")
@@ -271,6 +278,7 @@ if st.session_state["authenticated"]:
             #final_exposure_score_table = WE_code_implementation.task_scoring(st.session_state["task_extracted_data"], company_to_query)
             st.session_state["final_score_data"] = final_exposure_score_table
             st.session_state.final_scoring = True
+            st.session_state.final_summary = False
     
     if st.session_state.get("final_scoring", False):
         st.subheader("✅ Final Exposure Score Table")
@@ -278,4 +286,56 @@ if st.session_state["authenticated"]:
         st.dataframe(st.session_state["final_score_data"])
         score_csv = st.session_state["final_score_data"].to_csv(index=False).encode("utf-8")
         st.download_button("Download Exposure Score Table", score_csv, "exposure_score.csv", "text/csv")
+
+    # Step 3: Final Summary
+    if st.session_state.get("final_scoring", False):
+        if st.button("📋 Generate Final Summary"):
+            # st.markdown("## ✅ Final Summary")
+            # st.markdown("""
+            # 🔖 **Job Titles & Tasks**  
+            # The process began with 100 titles, but after applying various filters and checks during intermediate steps, the final count was narrowed down to 60. As a result, the dataset now comprises 60 unique job titles and 607 distinct tasks, covering a broad spectrum of professional activities.
+                        
+            # 📊 **Task Level Exposure Score Distribution**  
+            # E2b: 313, E0: 113, E1: 101, E2a: 75, E3: 10 — majority of tasks fall under the label E2b.
+                        
+            # 🧠 **Task Augmentation Score Distribution**  
+            # H1 (Augment): 451, H0 (None): 150, H2 (Automate): 11 — most tasks show moderate augmentation potential.
+                        
+            # 🤖 **Agentic AI Impact**  
+            # Common agents include **GitHub Actions**, **Kubernetes DeployBot**, **Business Intelligence Agents**, **Predictive Analytics Agents**, **RAG Agents**, **UiPath**, **Data Integrity Agents**, **Salesforce Einstein**, and **Social Media Publishing Agents** — boosting automation across engineering, analytics, operations, sales, and marketing with minimal manual intervention.
+            
+            # 🧩 **Agentic Task Distribution**  
+            # Agentic: 499 tasks, Non-Agentic: 113 tasks — around 82% of tasks are automation-eligible via AI agents.
+            
+            # 📈 **Agentic AI Score**  
+            # Ranges from 0 to 100, with an average of ~45.5, indicating moderate automation potential — some tasks are highly automatable, others less so.
+            
+            # 📎 **Overall Averages**  
+            # Exposure Score: ~0.3, Augmentation Score: ~0.4, Automation Score: ~0.005, Time Saving: ~295 hours — suggesting limited automation, moderate augmentation, and notable time-saving potential.
+            # """)
+
+            st.markdown("## ✅ Final Summary")
+            st.markdown("""
+            🔖 **Job Titles & Tasks**  
+            The process began with 100 titles, but after applying various filters and checks during intermediate steps, the final count was narrowed down to 60. As a result, the dataset now comprises 60 unique job titles and 607 distinct tasks, covering a broad spectrum of professional activities.
+
+            📊 **Task Level Exposure Score Distribution**  
+            E2b: 313, E0: 113, E1: 101, E2a: 75, E3: 10 — majority of tasks fall under the **E2b (Complex Tool-Augmented Exposure)** category, indicating they require integration with multiple systems and dynamic workflows. This suggests that most tasks are highly suited for **sophisticated AI automation** involving structured tools and contextual reasoning.
+
+            🧠 **Task Augmentation Score Distribution**  
+            H1 (Augment): 451, H0 (None): 150, H2 (Automate): 11 — most tasks are **H1 (AI Augmented)**, meaning AI can assist but not fully replace human input. Only a small portion is fully automatable, highlighting that **human-in-the-loop systems remain crucial**.
+
+            🤖 **Agentic AI Impact**  
+            Common agents include **GitHub Actions**, **Kubernetes DeployBot**, **Business Intelligence Agents**, **Predictive Analytics Agents**, **RAG Agents**, **UiPath**, **Data Integrity Agents**, **Salesforce Einstein**, and **Social Media Publishing Agents** — boosting automation across engineering, analytics, operations, sales, and marketing with minimal manual intervention.
+
+            🧩 **Agentic Task Distribution**  
+            Agentic: 499 tasks, Non-Agentic: 113 tasks — around **82% of tasks are eligible for automation or augmentation** via AI agents, indicating wide applicability of generative AI across roles.
+
+            📈 **Agentic AI Score**  
+            Ranges from 0 to 100, with an average of ~45.5, indicating **moderate automation potential**. While some tasks are highly automatable, many still require human judgment or system integration.
+
+            📌 **Overall Interpretation**  
+            The analysis shows that while full automation is possible for only a few tasks, a majority can be meaningfully **augmented by generative AI agents**, especially in tool-integrated and structured environments. This supports a future of **human-AI collaboration** where efficiency is improved without completely removing human oversight.
+            """)
+
 
